@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: corrector-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: LANGUAGETOOL_URL
+        value: https://api.languagetool.org/v2/check
