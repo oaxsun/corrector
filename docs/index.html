@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verificador de gramática en Español Latinoamericano</title>
+  <script src="config.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="bootLoader" class="boot-loader">
+    <div class="boot-card">
+      <div class="spinner"></div>
+      <h2>Conectando con el corrector...</h2>
+      <p id="bootMessage">Estamos despertando el servidor. Esto puede tardar unos segundos.</p>
+    </div>
+  </div>
+
+  <div class="container app-hidden" id="appRoot">
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">
+          <h1>Verificador Gramatical</h1>
+          <p>Español Latinoamericano · corrección con backend en Render</p>
+        </div>
+        <div class="version">v1.0.2</div>
+      </div>
+
+      <div class="content">
+        <section class="panel editor-panel">
+          <div class="panel-title">
+            <h2>Editor de texto</h2>
+            <div class="hint">Haz clic sobre una palabra subrayada para ver la sugerencia.</div>
+          </div>
+          <div class="editor-wrap">
+            <div id="highlights" class="highlights" aria-hidden="true"></div>
+            <textarea id="textInput" spellcheck="false" placeholder="Pega o escribe aquí tu texto en español..."></textarea>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" onclick="analyzeText()">Analizar</button>
+            <button class="btn-success" onclick="correctText()">Corregir</button>
+            <button class="btn-copy" onclick="copyText()">Copiar</button>
+            <button class="btn-secondary" onclick="clearText()">Limpiar</button>
+          </div>
+        </section>
+
+        <aside class="panel stats-panel">
+          <div class="panel-title">
+            <h2>Resumen</h2>
+            <div class="hint">Métricas rápidas del texto</div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card"><span>Palabras</span><strong id="wordCount">0</strong></div>
+            <div class="stat-card"><span>Letras</span><strong id="letterCount">0</strong></div>
+            <div class="stat-card"><span>Caracteres</span><strong id="charCount">0</strong></div>
+            <div class="stat-card"><span>Posibles errores</span><strong id="issueCount">0</strong></div>
+          </div>
+          <div class="result-box" id="grammarResult">
+            <div class="badge warn">Esperando análisis</div>
+            <div class="score">Puntuación estimada: --/100</div>
+            <div class="legend">Presiona <strong>Analizar</strong> para revisar faltas de ortografía, acentuación, gramática y puntuación.</div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="footer">
+        <div>© OAXSUN Technologies 2026</div>
+        <div>Frontend conectado a tu backend en Render.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
