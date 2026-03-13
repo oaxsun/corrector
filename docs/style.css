@@ -1,5 +1,5 @@
 :root {
-  --bg: #050816;
+  --bg: #07111f;
   --panel: rgba(10, 18, 35, 0.78);
   --panel-strong: rgba(9, 14, 28, 0.92);
   --line: rgba(110, 168, 255, 0.22);
@@ -16,14 +16,23 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  min-height: 100%;
+  background-color: #07111f;
+}
+
+body {
   min-height: 100vh;
   font-family: Inter, Arial, sans-serif;
-  background:
+  background-color: #07111f;
+  background-image:
     radial-gradient(circle at top left, rgba(74, 144, 255, 0.18), transparent 28%),
     radial-gradient(circle at top right, rgba(107, 231, 255, 0.12), transparent 22%),
     linear-gradient(180deg, #030611 0%, #07111f 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--text);
   overflow-x: hidden;
 }
