@@ -361,20 +361,57 @@ function showTooltipAtPosition(match, top, left) {
   }
 
   tooltip.innerHTML = `
-    <div class="tooltip-title">${escapeHtml(selectedText)}</div>
-    <div class="tooltip-subtitle">${escapeHtml(match.message || 'Posible error detectado.')}</div>
+    <div class="tooltip-header">
+      <div class="tooltip-title">${escapeHtml(selectedText)}</div>
+      <div class="tooltip-subtitle">${escapeHtml(match.message || 'Posible error detectado.')}</div>
+    </div>
     <div class="tooltip-actions">
       ${suggestions.slice(0, 6).map((suggestion, index) => `
         <button class="tooltip-suggestion" type="button" data-index="${index}">
-          ${escapeHtml(suggestion)}
+          <span>${escapeHtml(suggestion)}</span>
         </button>
       `).join('')}
+      <button class="tooltip-ignore" type="button" data-ignore="1">
+        <span>Ignorar</span>
+      </button>
     </div>
   `;
 
   tooltip.classList.remove('hidden');
-  tooltip.style.top = `${top}px`;
-  tooltip.style.left = `${left}px`;
+  tooltip.style.top = '0px';
+  tooltip.style.left = '0px';
+
+  const viewportPadding = 8;
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const tooltipWidth = tooltipRect.width;
+  const tooltipHeight = tooltipRect.height;
+
+  let finalLeft = left - (tooltipWidth / 2);
+  let finalTop = top;
+
+  if (finalLeft < viewportPadding + window.scrollX) {
+    finalLeft = viewportPadding + window.scrollX;
+  }
+
+  const maxLeft = window.scrollX + viewportWidth - tooltipWidth - viewportPadding;
+  if (finalLeft > maxLeft) {
+    finalLeft = maxLeft;
+  }
+
+  const bottomOverflow = (finalTop - window.scrollY) + tooltipHeight > viewportHeight - viewportPadding;
+  if (bottomOverflow) {
+    finalTop = top - tooltipHeight - 14;
+  }
+
+  if (finalTop < window.scrollY + viewportPadding) {
+    finalTop = window.scrollY + viewportPadding;
+  }
+
+  tooltip.style.left = `${finalLeft}px`;
+  tooltip.style.top = `${finalTop}px`;
 
   tooltip.querySelectorAll('.tooltip-suggestion').forEach((button, index) => {
     button.addEventListener('click', async () => {
@@ -392,6 +429,14 @@ function showTooltipAtPosition(match, top, left) {
       textInput.focus();
     });
   });
+
+  const ignoreButton = tooltip.querySelector('[data-ignore="1"]');
+  if (ignoreButton) {
+    ignoreButton.addEventListener('click', () => {
+      hideTooltip();
+      textInput.focus();
+    });
+  }
 }
 
 function showTooltipForMatch(match, anchorEl) {
@@ -404,7 +449,7 @@ function showTooltipForMatch(match, anchorEl) {
 function showTooltipFromTextareaClick(match) {
   const coords = getCaretCoordinates(textInput, match.offset + match.length);
   const top = coords.textareaRect.top + window.scrollY + coords.top + coords.lineHeight + 8;
-  const left = coords.textareaRect.left + window.scrollX + coords.left;
+  const left = coords.textareaRect.left + window.scrollX + coords.left + 12;
   showTooltipAtPosition(match, top, left);
 }
 
